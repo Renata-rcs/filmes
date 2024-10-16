@@ -6,18 +6,41 @@ import apiMovie from "@/app/services/apiMovies";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Link from "next/link";
 
-export default function Page() {
+export default function Page({params}) {
 
     const [filmes, setFilmes] = useState([])
+    const [titulo, setTitulo] = useState([])
 
     useEffect(() => {
-        apiMovie.get('movie/popular').then(resultado => {
+        const tipo = params.tipo 
+        apiMovie.get(`movie/${params.tipo}`).then(resultado => {
             setFilmes(resultado.data.results)
+
+
+            let tituloAtual;
+            switch (tipo) {
+                case 'popular':
+                    tituloAtual = 'Filmes Populares';
+                    break;
+                case 'now_playing':
+                    tituloAtual = 'Filmes em Cartaz';
+                    break;
+                case 'upcoming':
+                    tituloAtual = 'Filmes em Breve';
+                    break;
+                case 'top_rated':
+                    tituloAtual = 'Filmes Mais Bem Avaliadas';
+                    break;
+                default:
+                    tituloAtual = 'Filmes';
+            }
+
+            setTitulo(tituloAtual);
         })
     }, [])
 
     return (
-        <Pagina titulo="Filmes">
+        <Pagina titulo={titulo}>
 
             <Row md={3}>
                 {filmes.map(item => (

@@ -6,12 +6,12 @@ import apiMovie from "@/app/services/apiMovies";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Link from "next/link";
 
-export default function Page() {
+export default function Page({params}) {
 
     const [series, setSeries] = useState([])
 
     useEffect(() => {
-        apiMovie.get('tv/top_rated').then(resultado => {
+        apiMovie.get(`tv/${params.tipo}`).then(resultado => {
             setSeries(resultado.data.results)
         })
     }, [])
@@ -36,6 +36,11 @@ export default function Page() {
                     </Col>
                 ))}
             </Row>
+
+            {series.map(item => (
+                <p>{item.title}</p>
+            ))}
+
         </Pagina>
     )
 }

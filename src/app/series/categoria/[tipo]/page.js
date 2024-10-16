@@ -6,18 +6,42 @@ import apiMovie from "@/app/services/apiMovies";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Link from "next/link";
 
-export default function Page() {
+export default function Page({params}) {
 
     const [series, setSeries] = useState([])
+    const [titulo, setTitulo] = useState([])
 
     useEffect(() => {
-        apiMovie.get('tv/top_rated').then(resultado => {
+        const tipo = params.tipo 
+
+        apiMovie.get(`tv/${params.tipo}`).then(resultado => {
             setSeries(resultado.data.results)
+
+
+            let tituloAtual;
+            switch (tipo) {
+                case 'popular':
+                    tituloAtual = 'Séries Populares';
+                    break;
+                case 'on_the_air':
+                    tituloAtual = 'Séries no Ar';
+                    break;
+                case 'airing_today':
+                    tituloAtual = 'Series em Estreia';
+                    break;
+                case 'top_rated':
+                    tituloAtual = 'Séries Mais Bem Avaliadas';
+                    break;
+                default:
+                    tituloAtual = 'Séries';
+            }
+
+            setTitulo(tituloAtual);
         })
     }, [])
 
     return (
-        <Pagina titulo="Séries">
+        <Pagina titulo={titulo}>
 
             <Row md={3}>
                 {series.map(item => (
@@ -36,6 +60,11 @@ export default function Page() {
                     </Col>
                 ))}
             </Row>
+
+            {series.map(item => (
+                <p>{item.title}</p>
+            ))}
+
         </Pagina>
     )
 }

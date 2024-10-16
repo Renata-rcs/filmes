@@ -38,9 +38,6 @@ export default function Page({ params }) {
                             {filme.genres.map(item => item.name).join(', ')}
                         </p>
                         <p><b>Sinopse: </b>{filme.overview}</p>
-                        <Link className="btn btn-primary" href="/filmes">
-                        Voltar
-                        </Link>
                     </Col>
                     <Col sm={12}>
                         <h1>Atores</h1>

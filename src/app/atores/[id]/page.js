@@ -39,9 +39,6 @@ export default function Page({ params }) {
                         <p><b>Local de Nascimento: </b>{ator.place_of_birth}</p>
                         <p><b>Popularidade: </b>{ator.popularity}</p>
                         <p><b>Biografia: </b>{ator.biography}</p>
-                        <Link className="btn btn-primary" href="/atores">
-                        Voltar
-                        </Link>
                     </Col>
                     <Col sm={12}>
                         <h1>Filmes</h1>

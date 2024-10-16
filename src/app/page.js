@@ -1,95 +1,95 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
 
-export default function Home() {
+import Pagina from "@/app/components/Pagina";
+import { useEffect, useState } from "react";
+import apiMovie from "@/app/services/apiMovies";
+import ReactImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
+import { Col, Row } from "react-bootstrap";
+import styles from './Page.module.css'; // Importa o CSS para estilização
+
+export default function Page() {
+  const [filmes, setFilmes] = useState([])
+  const [series, setSeries] = useState([])
+  const [atores, setAtores] = useState([])
+
+  useEffect(() => {
+    apiMovie.get('movie/popular').then(resultado => {
+      let imagens = resultado.data.results.map(item => ({
+        original: 'https://image.tmdb.org/t/p/w500' + item.backdrop_path,
+        thumbnail: 'https://image.tmdb.org/t/p/w200' + item.backdrop_path,
+        originalTitle: item.title,
+      }))
+      setFilmes(imagens)
+    })
+
+    apiMovie.get('tv/popular').then(resultado => {
+      let imagens = resultado.data.results.map(item => ({
+        original: 'https://image.tmdb.org/t/p/w500' + item.backdrop_path,
+        thumbnail: 'https://image.tmdb.org/t/p/w200' + item.backdrop_path,
+        originalTitle: item.name,
+      }))
+      setSeries(imagens)
+    })
+
+    apiMovie.get('person/popular').then(resultado => {
+      let imagens = resultado.data.results.map(item => ({
+        original: 'https://image.tmdb.org/t/p/w500' + item.profile_path,
+        thumbnail: 'https://image.tmdb.org/t/p/w200' + item.profile_path,
+        originalTitle: item.name,
+      }))
+      setAtores(imagens)
+    })
+  }, [])
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <Pagina titulo="The Movie">
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+      <Row className="my-5">
+        <Col md={6} className={styles.textCol}>
+          <h2>Filmes</h2>
+          <p>
+            Mergulhe em uma jornada visual pelos filmes que têm capturado a imaginação do público. Este é o seu bilhete para o mundo das grandes histórias e cinematografia impressionante. Aqui, você encontrará uma coleção de filmes que estão dominando as telas e deixando uma marca indelével na cultura pop.
+          </p>
+          <p>
+            Prepare-se para se perder em narrativas emocionantes e em visuais de tirar o fôlego que definem os favoritos do momento. A aventura começa agora!
+          </p>
+        </Col>
+        <Col md={6} className={styles.carouselCol}>
+          {filmes.length && <ReactImageGallery items={filmes} />}
+        </Col>
+      </Row>
+
+      <Row className="my-5">
+        <Col md={6} className={styles.carouselCol}>
+          {series.length && <ReactImageGallery items={series} />}
+        </Col>
+        <Col md={6} className={styles.textCol}>
+        <h2>Séries</h2>
+          <p>
+            Entre no universo das séries que estão no topo das paradas e que têm conquistado corações e mentes ao redor do mundo. Este carrossel oferece uma visão geral das narrativas mais envolventes e dos personagens mais memoráveis da atualidade.
+          </p>
+          <p>
+            Prepare-se para explorar mundos novos e emocionantes, onde cada episódio promete uma nova aventura. É a sua chance de acompanhar as histórias que estão moldando a TV moderna.
+          </p>
+        </Col>
+      </Row>
+
+      <Row className="my-5">
+        <Col md={6} className={styles.textCol}>
+          <h2>Atores Populares</h2>
+          <p>
+            Conheça as estrelas que estão brilhando no cenário global. Estes são os talentos que estão transformando a indústria do entretenimento com suas performances cativantes e carismáticas. São as pessoas que trazem a magia para as telas e cativam audiências com cada papel que interpretam.
+          </p>
+          <p>
+            Explore as personalidades que estão fazendo ondas e deixando uma impressão duradoura no público e na crítica. É hora de conhecer os nomes que são sinônimo de talento e sucesso na indústria do cinema e da televisão.
+          </p>
+        </Col>
+        <Col md={6} className={styles.carouselCol}>
+          {atores.length && <ReactImageGallery items={atores} />}
+        </Col>
+      </Row>
+
+    </Pagina>
+  )
 }
